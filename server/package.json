@@ -1,0 +1,36 @@
+{
+  "name": "playbook-builder-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Security automation playbook builder API (Express, Prisma, MySQL)",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "prisma:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "bcryptjs": "^3.0.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "6.19.3",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.19.0",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

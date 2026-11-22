@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(uuid()) @db.Char(36)
+  email         String        @unique @db.VarChar(255)
+  passwordHash  String        @db.VarChar(255)
+  createdAt     DateTime      @default(now())
+  playbooks     Playbook[]
+  triggerGrants UserTrigger[]
+}
+
+model Trigger {
+  id        String        @id @default(uuid()) @db.Char(36)
+  name      String        @unique @db.VarChar(50)
+  createdAt DateTime      @default(now())
+  playbooks Playbook[]
+  grants    UserTrigger[]
+}
+
+model UserTrigger {
+  userId    String   @db.Char(36)
+  triggerId String   @db.Char(36)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trigger   Trigger  @relation(fields: [triggerId], references: [id], onDelete: Restrict)
+
+  @@id([userId, triggerId])
+}
+
+model Action {
+  id        String           @id @default(uuid()) @db.Char(36)
+  name      String           @unique @db.VarChar(50)
+  sortOrder Int              @unique
+  links     PlaybookAction[]
+}
+
+model Playbook {
+  id        String           @id @default(uuid()) @db.Char(36)
+  userId    String           @db.Char(36)
+  triggerId String           @db.Char(36)
+  name      String           @db.VarChar(100)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trigger   Trigger          @relation(fields: [triggerId], references: [id], onDelete: Restrict)
+  actions   PlaybookAction[]
+
+  @@unique([userId, name])
+  @@index([triggerId])
+}
+
+model PlaybookAction {
+  playbookId String   @db.Char(36)
+  actionId   String   @db.Char(36)
+  position   Int
+  playbook   Playbook @relation(fields: [playbookId], references: [id], onDelete: Cascade)
+  action     Action   @relation(fields: [actionId], references: [id], onDelete: Restrict)
+
+  @@id([playbookId, actionId])
+  @@unique([playbookId, position])
+  @@index([actionId])
+}
