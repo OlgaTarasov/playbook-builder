@@ -9,6 +9,7 @@ import { TriggerRepository } from './repositories/trigger.repository';
 import { UserRepository } from './repositories/user.repository';
 import { createActionsRouter } from './routes/actions.routes';
 import { createAuthRouter } from './routes/auth.routes';
+import { createDocsRouter } from './routes/docs.routes';
 import { createPlaybooksRouter } from './routes/playbooks.routes';
 import { createSimulationRouter } from './routes/simulation.routes';
 import { createTriggersRouter } from './routes/triggers.routes';
@@ -49,6 +50,7 @@ export function createApp({ prisma, jwtSecret, cookieSecure = false }: AppDepend
   app.disable('x-powered-by');
   app.use(express.json({ limit: '10kb' }));
 
+  app.use(createDocsRouter());
   app.use('/auth', createAuthRouter(authService, { cookieSecure, authenticate }));
   app.use('/triggers', authenticate, createTriggersRouter(triggerService));
   app.use('/actions', authenticate, createActionsRouter(actionService));

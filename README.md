@@ -99,6 +99,8 @@ All requests and responses are JSON. Errors have one shape: `{ "error": { "code"
 
 Every route except `/auth/*` needs the session cookie. Register and login set it (`HttpOnly`); the browser sends it automatically on same-origin requests.
 
+Interactive docs (Swagger UI) are at `/docs`, and the raw OpenAPI 3.0 document is at `/openapi.json`. Both are public and need no session. Keep `server/src/docs/openapi.ts` in step with the routes when they change.
+
 | Method | Path | Purpose |
 |---|---|---|
 | POST | `/auth/register` | Create an account. Sets the session cookie and returns `{ user }`. |
